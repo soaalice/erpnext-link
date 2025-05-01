@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.config.ErpApiConfig;
-import com.example.demo.models.PurchaseOrder;
+import com.example.demo.models.PurchaseInvoice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class PurchaseOrderService {
+public class PurchaseInvoiceService {
     
-    public List<PurchaseOrder> getPurchaseOrdersBySupplier(String supplierId, String sessionId) throws Exception {
-        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Order?supplier=" + supplierId;
+    public List<PurchaseInvoice> getPurchaseInvoices(String sessionId) throws Exception {
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Invoice?";
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -39,10 +39,11 @@ public class PurchaseOrderService {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        List<Map<String, Object>> rawSuppliers = (List<Map<String, Object>>) response.getBody().get("data");
+        List<Map<String, Object>> rawInvoices = (List<Map<String, Object>>) response.getBody().get("data");
 
-        return rawSuppliers.stream()
-            .map(data -> objectMapper.convertValue(data, PurchaseOrder.class))
+        return rawInvoices.stream()
+            .map(data -> objectMapper.convertValue(data, PurchaseInvoice.class))
             .toList();
+        
     }
 }
