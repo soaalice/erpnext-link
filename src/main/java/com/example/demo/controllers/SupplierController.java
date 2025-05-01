@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.services.SupplierService;
@@ -16,7 +17,7 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public String listSuppliers(HttpSession session, Model model) {
         String sid = (String) session.getAttribute("sid");
         if (sid == null) {
