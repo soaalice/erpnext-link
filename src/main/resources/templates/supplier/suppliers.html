@@ -25,12 +25,16 @@
                     <tr>
                         <th>ID</th>
                         <th>Supplier Name</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="supplier, stat : ${suppliers}">
                         <td th:text="${stat.index + 1}">1</td>
                         <td th:text="${supplier.name}">Acme Corp</td>
+                        <td>
+                            <a href="/supplier/${supplier.name}">View Request Quotation</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
