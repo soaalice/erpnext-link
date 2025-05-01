@@ -10,7 +10,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
-                .addPathPatterns("/")
+                .addPathPatterns("/", "/supplier/**", "/request-quotation/**", "/purchase-order/**")
                 .excludePathPatterns("/auth/**", "/css/**", "/js/**");
     }
 }

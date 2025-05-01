@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+
+import com.example.demo.config.ErpApiConfig;
+
 import org.springframework.web.client.HttpClientErrorException;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +26,6 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-    private static final String ERP_URL = "http://erpnext.localhost:8000/api/method";
     
     @GetMapping("/login")
     public String login() {
@@ -35,7 +37,7 @@ public class AuthController {
         String sid = (String) session.getAttribute("sid");
 
         if (sid != null) {
-            String erpLogoutUrl = ERP_URL + "/logout";
+            String erpLogoutUrl = ErpApiConfig.ERP_URL_METHOD + "/logout";
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
@@ -59,7 +61,7 @@ public class AuthController {
     @PostMapping("/login")
     public String loginPost(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
 
-        String erpUrl = ERP_URL + "/login";
+        String erpUrl = ErpApiConfig.ERP_URL_METHOD + "/login";
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, String> creds = new HashMap<>();
