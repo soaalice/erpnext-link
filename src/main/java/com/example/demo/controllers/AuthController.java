@@ -37,7 +37,7 @@ public class AuthController {
         String sid = (String) session.getAttribute("sid");
 
         if (sid != null) {
-            String erpLogoutUrl = ErpApiConfig.ERP_URL + "/logout";
+            String erpLogoutUrl = ErpApiConfig.ERP_URL_METHOD + "/logout";
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
@@ -61,7 +61,7 @@ public class AuthController {
     @PostMapping("/login")
     public String loginPost(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
 
-        String erpUrl = ErpApiConfig.ERP_URL + "/login";
+        String erpUrl = ErpApiConfig.ERP_URL_METHOD + "/login";
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, String> creds = new HashMap<>();

@@ -15,13 +15,30 @@
                     <i data-lucide="layout-dashboard" class="me-2"></i>
                     <strong>ERP System</strong>
                 </a>
-                <div class="ms-auto">
-                    <div th:if="${loggedIn ?: false}">
-                        <a href="/auth/logout" class="btn btn-outline-danger me-2">Logout</a>
-                    </div>
-                    <div th:unless="${loggedIn ?: false}">
-                        <a href="/auth/login" class="btn btn-outline-primary me-2">Login</a>
-                    </div>
+        
+                <!-- Bouton hamburger pour mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <!-- Liens de navigation -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <div class="d-flex align-items-center" th:if="${loggedIn ?: false}">
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="/supplier/list">
+                                    <i data-lucide="truck" class="me-1"></i>Suppliers
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-danger" href="/auth/logout">Logout</a>
+                            </li>
+                        </div>
+                        <li class="nav-item" th:unless="${loggedIn ?: false}">
+                            <a href="/auth/login" class="btn btn-outline-primary ms-3">Login</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
