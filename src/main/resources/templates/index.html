@@ -9,27 +9,13 @@
 </head>
 
 <body onload="lucide.createIcons()">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <i data-lucide="briefcase" class="me-2"></i> <strong>ERP System</strong>
-            </a>
-            <div class="ms-auto">
-                <div th:if="${loggedIn}">
-                    <a href="/auth/logout" class="btn btn-outline-danger me-2">Logout</a>
-                </div>
-                <div th:unless="${loggedIn}">
-                    <a href="/auth/login" class="btn btn-outline-primary me-2">Login</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div th:replace="~{inc/header :: header}"></div>
 
     <main class="container text-center mt-5">
         <h1 class="display-4">Welcome to Your ERP Platform</h1>
         <p class="lead text-muted mt-3">Manage your business resources efficiently, all in one place.</p>
-        <a th:href="@{/auth/login}" class="btn btn-primary btn-lg mt-4" th:if="${!loggedIn}">Get Started</a>
-        <a th:href="@{/dashboard}" class="btn btn-success btn-lg mt-4" th:if="${loggedIn}">Go to Dashboard</a>
+        <a th:href="@{/auth/login}" class="btn btn-primary btn-lg mt-4" th:unless="${loggedIn ?: false}">Get Started</a>
+        <a th:href="@{/dashboard}" class="btn btn-success btn-lg mt-4" th:if="${loggedIn ?: false}">Go to Dashboard</a>
     </main>
 </body>
 
