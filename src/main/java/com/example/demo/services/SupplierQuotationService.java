@@ -29,10 +29,7 @@ public class SupplierQuotationService {
         headers.set("Cookie", sessionId);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         HttpEntity<String> request = new HttpEntity<>(headers);
-
-        System.out.println("Request: " + request);
 
         ResponseEntity<Map> response = restTemplate.exchange(
             url,
@@ -40,8 +37,6 @@ public class SupplierQuotationService {
             request,
             Map.class
         );
-
-        System.out.println("Response: " + response.getBody());
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<Map<String, Object>> rawQuotations = (List<Map<String, Object>>) response.getBody().get("data");
