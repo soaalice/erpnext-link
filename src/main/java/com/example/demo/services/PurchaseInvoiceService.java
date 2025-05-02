@@ -35,15 +35,12 @@ public class PurchaseInvoiceService {
             Map.class
         );
 
-        System.out.println("Response: " + response.getBody());
-
         ObjectMapper objectMapper = new ObjectMapper();
 
         List<Map<String, Object>> rawInvoices = (List<Map<String, Object>>) response.getBody().get("data");
 
         return rawInvoices.stream()
             .map(data -> objectMapper.convertValue(data, PurchaseInvoice.class))
-            .toList();
-        
+            .toList();   
     }
 }

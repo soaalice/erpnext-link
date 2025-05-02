@@ -27,7 +27,6 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto align-items-lg-center">
-                        <!-- Liens visibles si connecté -->
                         <th:block th:if="${loggedIn ?: false}">
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-1" href="/supplier/list">
@@ -46,7 +45,6 @@
                             </li>
                         </th:block>
 
-                        <!-- Lien login si non connecté -->
                         <li class="nav-item" th:unless="${loggedIn ?: false}">
                             <a href="/auth/login" class="btn btn-outline-primary ms-lg-3">
                                 <i data-lucide="log-in" class="me-1"></i> Login

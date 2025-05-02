@@ -35,8 +35,6 @@ public class SupplierService {
                 Map.class
         );
 
-        System.out.println("Response: " + response.getBody());
-
         ObjectMapper objectMapper = new ObjectMapper();
 
         List<Map<String, Object>> rawSuppliers = (List<Map<String, Object>>) response.getBody().get("data");

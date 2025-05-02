@@ -49,7 +49,7 @@
                         <td th:text="${stat.index + 1}">1</td>
                         <td th:text="${supplier.name}">Acme Corp</td>
                         <td class="table-actions">
-                            <a th:href="@{/request-quotation/supplier/{name}(name=${supplier.name})}"
+                            <a th:href="@{/supplier-quotation/supplier/{name}(name=${supplier.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
                                 <i data-lucide="file-text"></i> View RFQs
                             </a>
