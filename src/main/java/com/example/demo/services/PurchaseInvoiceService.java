@@ -19,7 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PurchaseInvoiceService {
     
     public List<PurchaseInvoice> getPurchaseInvoices(String sessionId) throws Exception {
-        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Invoice?";
+        String fields = "[\"name\", \"supplier\", \"status\", \"total\"]";
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Invoice?fields=" + fields;
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -43,4 +44,6 @@ public class PurchaseInvoiceService {
             .map(data -> objectMapper.convertValue(data, PurchaseInvoice.class))
             .toList();   
     }
+
+    // public PurchaseInvoice updatPurchaseInvoice
 }

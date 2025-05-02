@@ -37,16 +37,20 @@
                 <thead class="table-light">
                     <tr>
                         <th style="width: 60px;">#</th>
+                        <th>Name</th>
                         <th>Status</th>
+                        <th>Amount</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="invoice, stat : ${invoices}">
                         <td th:text="${stat.index + 1}">1</td>
+                        <td th:text="${invoice.name}">INV-001</td>
                         <td th:text="${invoice.status}">Delivered</td>
+                        <td th:text="${invoice.total}">100.00</td>
                         <td>
-                            <a th:href="@{/purchase-invoice/{id}(id=${invoice.id})}"
+                            <a th:if="${invoice.status != 'Paid'}" th:href="@{/payment-entry/create/{supplier}/{amount}(supplier=${invoice.supplier}, amount=${invoice.total})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
                                 <i data-lucide="credit-card"></i> Pay Invoice
                             </a>

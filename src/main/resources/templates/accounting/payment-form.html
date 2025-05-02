@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Entry Form - ERP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body onload="lucide.createIcons()">
+    <div th:replace="~{inc/header :: header}"></div>
+
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 page-header pb-2">
+            <h2 class="mb-0 d-flex align-items-center gap-2">
+                <i data-lucide="credit-card"></i> Payment Entry Form
+            </h2>
+        </div>
+
+        <div th:if="${error != null}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success != null}" class="alert alert-success" th:text="${success}"></div>
+
+        <div class="alert alert-info" role="alert" th:if="${paymentEntry.totalAmount != null}">
+            <strong>Total Amount to Pay:</strong> <span th:text="${paymentEntry.totalAmount}">0.00</span>
+        </div>
+
+        <form th:action="@{/payment-entry/create}" method="post" class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="typeOfPayment" class="form-label">Type of Payment</label>
+                        <input type="text" id="typeOfPayment" name="typeOfPayment" class="form-control"
+                            th:value="${paymentEntry.typeOfPayment}" list="typeOfPaymentOptions" required>
+                        <datalist id="typeOfPaymentOptions">
+                            <option value="Receive"></option>
+                            <option value="Pay"></option>
+                            <option value="Internal Transfer"></option>
+                        </datalist>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="modeOfPayment" class="form-label">Mode of Payment</label>
+                        <input type="text" id="modeOfPayment" name="modeOfPayment" class="form-control"
+                            th:value="${paymentEntry.modeOfPayment}" list="modeOfPaymentOptions" required>
+                        <datalist id="modeOfPaymentOptions">
+                            <option value="Cash"></option>
+                            <option value="Bank Transfer"></option>
+                            <option value="Credit Card"></option>
+                            <option value="Check"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="partyType" class="form-label">Party Type</label>
+                        <input type="text" id="partyType" name="partyType" class="form-control"
+                            th:value="${paymentEntry.partyType}" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="partyName" class="form-label">Party Name</label>
+                        <input type="text" id="partyName" name="partyName" class="form-control"
+                            th:value="${paymentEntry.partyName}" readonly required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="party" class="form-label">Party</label>
+                        <input type="text" id="party" name="party" class="form-control"
+                            th:value="${paymentEntry.party}" readonly required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="paidFrom" class="form-label">Paid From</label>
+                        <input type="text" id="paidFrom" name="paidFrom" class="form-control"
+                            th:value="${paymentEntry.paidFrom}" list="paidFromOptions" required>
+                        <datalist id="paidFromOptions">
+                            <option value="Espèces - A"></option>
+                            <option value="Bank Account - A"></option>
+                        </datalist>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="paidAmount" class="form-label">Paid Amount</label>
+                        <input type="number" min="0" step="0.01" id="paidAmount" name="paidAmount" class="form-control"
+                            th:value="${paymentEntry.paidAmount}" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="postingDate" class="form-label">Posting Date</label>
+                        <input type="date" id="postingDate" name="postingDate" class="form-control"
+                            th:value="${paymentEntry.postingDate}" readonly required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="company" class="form-label">Company</label>
+                        <input type="text" id="company" name="company" class="form-control"
+                            th:value="${paymentEntry.company}" readonly required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="referenceNo" class="form-label">Reference No</label>
+                        <input type="text" id="referenceNo" name="referenceNo" class="form-control"
+                            th:value="${paymentEntry.referenceNo}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="referenceDate" class="form-label">Reference Date</label>
+                        <input type="date" id="referenceDate" name="referenceDate" class="form-control"
+                            th:value="${paymentEntry.referenceDate}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer text-end">
+                <button type="submit" class="btn btn-primary">Pay</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
