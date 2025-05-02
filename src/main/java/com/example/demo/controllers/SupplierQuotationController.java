@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.models.SupplierQuotation;
+import com.example.demo.models.SupplierQuotationItem;
 import com.example.demo.services.SupplierQuotationService;
 
 import jakarta.servlet.http.HttpSession;
@@ -48,9 +49,11 @@ public class SupplierQuotationController {
 
         try {
             SupplierQuotation quotation = supplierQuotationService.fetchSupplierQuotationById(id, sid);
-            System.out.println("name: "+quotation.getName());
-            System.out.println("status: "+quotation.getStatus());
-            System.out.println("supplier: "+quotation.getSupplier());
+
+            for (SupplierQuotationItem item : quotation.getItems()) {
+                System.out.println("item code:"+ item.getItemCode());
+                System.out.println("item name:"+ item.getItemName());
+            }
             model.addAttribute("quotation", quotation);
         } catch (Exception e) {
             e.printStackTrace();

@@ -73,15 +73,8 @@ public class SupplierQuotationService {
 
         List<Map<String, Object>> rawItems = (List<Map<String, Object>>) rawQuotation.get("items");
         List<SupplierQuotationItem> items = rawItems.stream()
-        .map(item -> {
-            try {
-                String json = objectMapper.writeValueAsString(item);
-                return objectMapper.readValue(json, SupplierQuotationItem.class);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        })
-        .toList();
+            .map(item -> objectMapper.convertValue(item, SupplierQuotationItem.class))
+            .toList();
 
         SupplierQuotation quotation = objectMapper.convertValue(rawQuotation, SupplierQuotation.class);
         quotation.setItems(items);
