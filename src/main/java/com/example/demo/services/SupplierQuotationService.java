@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SupplierQuotationService {
 
     public List<SupplierQuotation> getSupplierQuotationsBySupplier(String supplierName, String sessionId) throws Exception {
-        String fields = "[\"name\", \"supplier\", \"status\"]";
+        String fields = "[\"name\", \"supplier\", \"status\", \"total\"]";
         String filters = "[[\"supplier\", \"=\", \"" + supplierName + "\"]]";
         String url = ErpApiConfig.ERP_URL_RESOURCE + "/Supplier Quotation?fields=" + fields + "&filters=" + filters;
         RestTemplate restTemplate = new RestTemplate();

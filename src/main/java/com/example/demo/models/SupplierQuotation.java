@@ -12,5 +12,6 @@ public class SupplierQuotation {
     private String name;
     private String status;
     private String supplier;
+    private String total;
     private List<SupplierQuotationItem> items;
 }

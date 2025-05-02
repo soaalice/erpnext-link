@@ -50,10 +50,6 @@ public class SupplierQuotationController {
         try {
             SupplierQuotation quotation = supplierQuotationService.fetchSupplierQuotationById(id, sid);
 
-            for (SupplierQuotationItem item : quotation.getItems()) {
-                System.out.println("item code:"+ item.getItemCode());
-                System.out.println("item name:"+ item.getItemName());
-            }
             model.addAttribute("quotation", quotation);
         } catch (Exception e) {
             e.printStackTrace();

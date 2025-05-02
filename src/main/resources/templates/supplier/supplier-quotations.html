@@ -48,6 +48,7 @@
                         <th>Name</th>
                         <th>Status</th>
                         <th>Supplier</th>
+                        <th>Amount</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -57,6 +58,7 @@
                         <td th:text="${quotation.name}" >RFQ</td>
                         <td th:text="${quotation.status}">Submitted</td>
                         <td th:text="${quotation.supplier}"></td>
+                        <td th:text="${quotation.total}">0</td>
                         <td class="table-actions">
                             <a th:href="@{/supplier-quotation/{name}(name=${quotation.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
