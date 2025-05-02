@@ -19,7 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PurchaseOrderService {
     
     public List<PurchaseOrder> getPurchaseOrdersBySupplier(String supplierId, String sessionId) throws Exception {
-        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Order?supplier=" + supplierId;
+        String fields = "[\"name\", \"supplier\", \"status\", \"total\"]";
+        String filters = "[[\"supplier\", \"=\", \"" + supplierId + "\"]]";
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Order?fields=" + fields + "&filters=" + filters;
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -34,6 +36,8 @@ public class PurchaseOrderService {
             request,
             Map.class
         );
+
+        System.out.println("Response: " + response.getBody());
 
         ObjectMapper objectMapper = new ObjectMapper();
 
