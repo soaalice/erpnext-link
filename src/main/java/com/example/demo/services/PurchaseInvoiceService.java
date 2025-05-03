@@ -44,6 +44,4 @@ public class PurchaseInvoiceService {
             .map(data -> objectMapper.convertValue(data, PurchaseInvoice.class))
             .toList();   
     }
-
-    // public PurchaseInvoice updatPurchaseInvoice
 }
