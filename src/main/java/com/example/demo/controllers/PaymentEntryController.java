@@ -24,8 +24,12 @@ public class PaymentEntryController {
     @Autowired
     private PaymentEntryService paymentEntryService;
     
-    @GetMapping("/create/{supplier}/{amount}")
-    public String createPaymentEntry(@PathVariable String supplier, @PathVariable String amount, Model model, HttpSession session) {
+    @GetMapping("/create/{supplier}/{amount}/{purchaseInvoice}")
+    public String createPaymentEntry(@PathVariable String supplier, 
+                                     @PathVariable String amount, 
+                                     @PathVariable String purchaseInvoice, 
+                                     Model model, 
+                                     HttpSession session) {
         String sid = (String) session.getAttribute("sid");
         if (sid == null) {
             return "redirect:/auth/login";
@@ -36,29 +40,33 @@ public class PaymentEntryController {
         paymentEntry.setPartyName(supplier);
         paymentEntry.setTotalAmount(Double.parseDouble(amount));
         model.addAttribute("paymentEntry", paymentEntry);
+        model.addAttribute("purchaseInvoice", purchaseInvoice);
         return "accounting/payment-form";
     }
 
     @PostMapping("/create")
-    public String savePaymentEntry(PaymentEntry paymentEntry, RedirectAttributes redirectAttributes, HttpSession session, Model model) {
+    public String savePaymentEntry(PaymentEntry paymentEntry, 
+                                   String purchaseInvoice, 
+                                   RedirectAttributes redirectAttributes, 
+                                   HttpSession session, Model model) {
         String sid = (String) session.getAttribute("sid");
         if (sid == null) {
             return "redirect:/auth/login";
         }
 
         try {
-            paymentEntryService.createPaymentEntry(sid, paymentEntry);
+            paymentEntryService.savePaymentEntry(sid, paymentEntry, purchaseInvoice);
             redirectAttributes.addFlashAttribute("success", "Payment Entry created successfully!");
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Unable to create Payment Entry: " + e.getMessage());
+            model.addAttribute("error", "Unable to create Payment Entry: " + e.getMessage());
             model.addAttribute("paymentEntry", paymentEntry);
-            return "payment-entry/payment-form";
+            return "accounting/payment-form";
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred: " + e.getMessage());
+            model.addAttribute("error", "An unexpected error occurred: " + e.getMessage());
             model.addAttribute("paymentEntry", paymentEntry);
-            return "payment-entry/payment-form";
+            return "accounting/payment-form";
         }
         return "redirect:/purchase-invoice/list";
     }

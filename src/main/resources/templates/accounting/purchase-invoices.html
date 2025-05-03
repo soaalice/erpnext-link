@@ -31,6 +31,7 @@
         </div>
 
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
         <div class="table-responsive">
             <table id="invoicesTable" class="table table-hover align-middle table-bordered">
@@ -50,7 +51,7 @@
                         <td th:text="${invoice.status}">Delivered</td>
                         <td th:text="${invoice.total}">100.00</td>
                         <td>
-                            <a th:if="${invoice.status != 'Paid'}" th:href="@{/payment-entry/create/{supplier}/{amount}(supplier=${invoice.supplier}, amount=${invoice.total})}"
+                            <a th:if="${invoice.status != 'Paid'}" th:href="@{/payment-entry/create/{supplier}/{amount}/{purchaseInvoice}(supplier=${invoice.supplier}, amount=${invoice.total}, purchaseInvoice=${invoice.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
                                 <i data-lucide="credit-card"></i> Pay Invoice
                             </a>

@@ -29,6 +29,7 @@
         <form th:action="@{/payment-entry/create}" method="post" class="card">
             <div class="card-body">
                 <div class="row mb-3">
+                    <input type="hidden" name="purchaseInvoice" th:value="${purchaseInvoice}">
                     <div class="col-md-6">
                         <label for="typeOfPayment" class="form-label">Type of Payment</label>
                         <input type="text" id="typeOfPayment" name="typeOfPayment" class="form-control"
