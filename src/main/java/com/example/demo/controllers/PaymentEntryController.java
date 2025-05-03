@@ -1,11 +1,8 @@
 package com.example.demo.controllers;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +21,11 @@ public class PaymentEntryController {
     @Autowired
     private PaymentEntryService paymentEntryService;
     
-    @GetMapping("/create/{supplier}/{amount}/{purchaseInvoice}")
-    public String createPaymentEntry(@PathVariable String supplier, 
-                                     @PathVariable String amount, 
-                                     @PathVariable String purchaseInvoice, 
+    @PostMapping("/create")
+    public String createPaymentEntry(String supplier, 
+                                     String amount, 
+                                     String purchaseInvoice,
+                                     String outstandingAmount, 
                                      Model model, 
                                      HttpSession session) {
         String sid = (String) session.getAttribute("sid");
@@ -39,12 +37,13 @@ public class PaymentEntryController {
         paymentEntry.setParty(supplier);
         paymentEntry.setPartyName(supplier);
         paymentEntry.setTotalAmount(Double.parseDouble(amount));
+        paymentEntry.setOutstandingAmount(Double.parseDouble(outstandingAmount));
         model.addAttribute("paymentEntry", paymentEntry);
         model.addAttribute("purchaseInvoice", purchaseInvoice);
         return "accounting/payment-form";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/save")
     public String savePaymentEntry(PaymentEntry paymentEntry, 
                                    String purchaseInvoice, 
                                    RedirectAttributes redirectAttributes, 

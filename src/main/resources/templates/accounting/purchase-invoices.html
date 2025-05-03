@@ -42,6 +42,7 @@
                         <th>Name</th>
                         <th>Status</th>
                         <th>Amount</th>
+                        <th>Outstanding Amount</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -51,11 +52,17 @@
                         <td th:text="${invoice.name}">INV-001</td>
                         <td th:text="${invoice.status}">Delivered</td>
                         <td th:text="${invoice.total}">100.00</td>
+                        <td th:text="${invoice.outstandingAmount}">50.00</td>
                         <td>
-                            <a th:if="${invoice.status != 'Paid'}" th:href="@{/payment-entry/create/{supplier}/{amount}/{purchaseInvoice}(supplier=${invoice.supplier}, amount=${invoice.total}, purchaseInvoice=${invoice.name})}"
-                                class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
-                                <i data-lucide="credit-card"></i> Pay Invoice
-                            </a>
+                            <form th:if="${invoice.status != 'Paid'}" th:action="@{/payment-entry/create}" method="post" class="d-inline">
+                                <input type="hidden" name="supplier" th:value="${invoice.supplier}" />
+                                <input type="hidden" name="amount" th:value="${invoice.total}" />
+                                <input type="hidden" name="outstandingAmount" th:value="${invoice.outstandingAmount}" />
+                                <input type="hidden" name="purchaseInvoice" th:value="${invoice.name}" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                                    <i data-lucide="credit-card"></i> Pay
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>

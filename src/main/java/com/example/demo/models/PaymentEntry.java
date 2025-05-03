@@ -29,6 +29,8 @@ public class PaymentEntry {
     private double paidAmount = 0.00;
     @JsonProperty("received_amount")
     private double receivedAmount = 0.00;
+    @JsonProperty("outstanding_amount")
+    private double outstandingAmount = 0.00;
     @JsonProperty("posting_date")
     private String postingDate = LocalDate.now().toString();
     private String company = "Admin";
