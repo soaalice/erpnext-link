@@ -11,7 +11,8 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/", "/supplier/**", "/supplier-quotation/**", 
-                                "/purchase-order/**", "/purchase-invoice/**")
+                                "/purchase-order/**", "/purchase-invoice/**",
+                                "/payment-entry/**")
                 .excludePathPatterns("/auth/**", "/css/**", "/js/**");
     }
 }
