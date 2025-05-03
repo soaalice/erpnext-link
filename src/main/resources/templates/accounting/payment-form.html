@@ -24,10 +24,11 @@
         <div th:if="${success != null}" class="alert alert-success" th:text="${success}"></div>
 
         <div class="alert alert-info" role="alert" th:if="${paymentEntry.totalAmount != null}">
-            <strong>Total Amount to Pay:</strong> <span th:text="${paymentEntry.totalAmount}">0.00</span>
+            <strong>Total Amount to Pay:</strong> <span th:text="${paymentEntry.totalAmount}">0.00</span><br>
+            <strong>Outstanding Amount:</strong> <span th:text="${paymentEntry.outstandingAmount}">0.00</span>
         </div>
 
-        <form th:action="@{/payment-entry/create}" method="post" class="card">
+        <form th:action="@{/payment-entry/save}" method="post" class="card">
             <div class="card-body">
                 <div class="row mb-3">
                     <input type="hidden" name="purchaseInvoice" th:value="${purchaseInvoice}">
