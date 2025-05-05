@@ -43,6 +43,22 @@ public class PurchaseInvoiceController {
         return "accounting/purchase-invoices";
     }
 
+    @GetMapping("/calendar/datas")
+    public ResponseEntity<?> getPurchaseInvoiceBySupplierById(HttpSession session) {
+        String sid = (String) session.getAttribute("sid");
+        if (sid == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Session expired. Please log in again.");
+        }
+
+        try {
+            List<PurchaseInvoice> purchaseInvoices = purchaseInvoiceService.getPurchaseInvoices(sid);
+            return ResponseEntity.ok(purchaseInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unable to fetch invoices : " + e.getMessage());
+        }
+    }
+
     @GetMapping("/{name}/export")
     public ResponseEntity<?> exportInvoice(HttpSession session, @PathVariable String name) {
         String sid = (String) session.getAttribute("sid");
