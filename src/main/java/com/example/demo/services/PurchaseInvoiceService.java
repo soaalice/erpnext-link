@@ -44,4 +44,28 @@ public class PurchaseInvoiceService {
             .map(data -> objectMapper.convertValue(data, PurchaseInvoice.class))
             .toList();   
     }
+
+    public PurchaseInvoice getPurchaseInvoice(String sessionId, String name) throws Exception {
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Purchase Invoice/"+name;
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", sessionId);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            request,
+            Map.class
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map<String, Object> rawInvoice = (Map<String, Object>) response.getBody().get("data");
+        
+        return objectMapper.convertValue(rawInvoice, PurchaseInvoice.class);
+    }
 }

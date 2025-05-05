@@ -54,7 +54,7 @@
                         <td th:text="${invoice.total}">100.00</td>
                         <td th:text="${invoice.outstandingAmount}">50.00</td>
                         <td>
-                            <form th:if="${invoice.status != 'Paid'}" th:action="@{/payment-entry/create}" method="post" class="d-inline">
+                            <form th:if="${invoice.status != 'Paid' && invoice.status != 'Draft'}" th:action="@{/payment-entry/create}" method="post" class="d-inline">
                                 <input type="hidden" name="supplier" th:value="${invoice.supplier}" />
                                 <input type="hidden" name="amount" th:value="${invoice.total}" />
                                 <input type="hidden" name="outstandingAmount" th:value="${invoice.outstandingAmount}" />
@@ -63,6 +63,9 @@
                                     <i data-lucide="credit-card"></i> Pay
                                 </button>
                             </form>
+                            <a th:href="@{/purchase-invoice/{name}/export(name=${invoice.name})}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1">
+                                <i data-lucide="file-output"></i> Export to Pdf
+                            </a>
                         </td>
                     </tr>
                 </tbody>
