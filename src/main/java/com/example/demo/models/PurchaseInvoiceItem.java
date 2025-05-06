@@ -22,8 +22,11 @@ public class PurchaseInvoiceItem {
     private String description;
     @JsonProperty("cost_center")
     private String costCenter;
-    @JsonProperty("purchase_order")
-    private String purchaseOrder;
+    
     @JsonProperty("material_request")
     private String materialRequest;
+    @JsonProperty("material_request_item")
+    private String materialRequestItem;
+    @JsonProperty("purchase_order")
+    private String purchaseOrder;
 }

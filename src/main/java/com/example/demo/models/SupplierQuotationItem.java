@@ -14,4 +14,14 @@ public class SupplierQuotationItem {
     private String itemName;
     private double qty;
     private double rate;
+
+    @JsonProperty("material_request")
+    private String materialRequest;
+    @JsonProperty("material_request_item")
+    private String materialRequestItem;
+    @JsonProperty("request_for_quotation")
+    private String requestForQuotation;
+    @JsonProperty("request_for_quotation_item")
+    private String requestForQuotationItem;
+
 }

@@ -76,5 +76,66 @@ public class SupplierQuotationService {
 
         return quotation;
     }
+
+    public void validateSupplierQuotation(String id, String sessionId) throws Exception {
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Supplier Quotation/" + id + "?run_method=submit";
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", sessionId);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        restTemplate.exchange(
+            url,
+            HttpMethod.POST,
+            request,
+            Map.class
+        );
+    }
+
+    public void updateSupplierQuotationItem(String id, String sessionId, SupplierQuotationItem updatedItem) throws Exception {
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Supplier Quotation Item/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", sessionId);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String updatedItemJson = objectMapper.writeValueAsString(updatedItem);
+
+        HttpEntity<String> request = new HttpEntity<>(updatedItemJson, headers);
+
+        restTemplate.exchange(
+            url,
+            HttpMethod.PUT,
+            request,
+            Map.class
+        );
+    }
+
+    public void updateSupplierQuotationItemRate(String id, String sessionId, double newRate) throws Exception {
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Supplier Quotation Item/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", sessionId);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> updateFields = Map.of("rate", newRate);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String updateFieldsJson = objectMapper.writeValueAsString(updateFields);
+
+        HttpEntity<String> request = new HttpEntity<>(updateFieldsJson, headers);
+
+        restTemplate.exchange(
+            url,
+            HttpMethod.PUT,
+            request,
+            Map.class
+        );
+    }
     
 }
