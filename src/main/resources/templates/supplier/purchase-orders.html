@@ -54,7 +54,7 @@
                                 <option value="Closed">Closed</option>
                             </select>
                         </th>
-                        <th>
+                        <!-- <th>
                             Advanced Payment Status<br>
                             <select id="paymentStatusFilter" class="form-select form-select-sm">
                                 <option value="">All</option>
@@ -63,9 +63,10 @@
                                 <option value="Partially Paid">Partially Paid</option>
                                 <option value="Fully Paid">Fully Paid</option>
                             </select>
-                        </th>
+                        </th> -->
                         <th>Supplier</th>
                         <th>Amount</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -75,9 +76,15 @@
                         <td th:text="${stat.index + 1}">1</td>
                         <td th:text="${order.name}">Sample Name</td>
                         <td th:text="${order.status}">Delivered</td>
-                        <td th:text="${order.advancedPaymentStatus}">Fully Paid</td>
+                        <!-- <td th:text="${order.advancedPaymentStatus}">Fully Paid</td> -->
                         <td th:text="${order.supplier}">Sample Supplier</td>
                         <td th:text="${order.total}">0.00</td>
+                        <td>
+                            <a th:href="@{/purchase-invoice/purchase-order/{name}(name=${order.name})}"
+                                class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                                <i data-lucide="receipt-text"></i> View PIs
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -111,18 +118,18 @@
                 });
             });
 
-            $('#paymentStatusFilter').on('change', function () {
-                const selectedPaymentStatus = $(this).val();
-                table.rows().every(function () {
-                    const row = $(this.node());
-                    const rowPaymentStatus = row.attr('data-payment-status');
-                    if (selectedPaymentStatus === "" || rowPaymentStatus === selectedPaymentStatus) {
-                        row.show();
-                    } else {
-                        row.hide();
-                    }
-                });
-            });
+            // $('#paymentStatusFilter').on('change', function () {
+            //     const selectedPaymentStatus = $(this).val();
+            //     table.rows().every(function () {
+            //         const row = $(this.node());
+            //         const rowPaymentStatus = row.attr('data-payment-status');
+            //         if (selectedPaymentStatus === "" || rowPaymentStatus === selectedPaymentStatus) {
+            //             row.show();
+            //         } else {
+            //             row.hide();
+            //         }
+            //     });
+            // });
         });
     </script>
 </body>
