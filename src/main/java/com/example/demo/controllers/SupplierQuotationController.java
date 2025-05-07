@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,11 +81,31 @@ public class SupplierQuotationController {
     }
 
     @PostMapping("/save")
-    public String createSupplierQuotation(HttpSession session, SupplierQuotation supplierQuotation, Map<String, Object> ){
-        System.out.println("Creating sq");
+    public String createSupplierQuotation(HttpSession session,
+                                          @RequestParam Map<String, String> params,
+                                          RedirectAttributes redirectAttributes){
         String sid = (String) session.getAttribute("sid");
         if (sid == null) {
             return "redirect:/auth/login";
+        }
+
+        SupplierQuotation supplierQuotation = new SupplierQuotation();
+        supplierQuotation.setSupplier(params.get("supplier"));
+        supplierQuotation.setTransactionDate(params.get("transactionDate"));
+
+        int itemCount = Integer.parseInt(params.get("itemCount"));
+        if (itemCount == 0) {
+            redirectAttributes.addFlashAttribute("error", "Supplier Quotation doit contenir des items.");
+            return "redirect:/supplier-quotation/create/"+params.get("supplier");
+        }
+
+        supplierQuotationService.setSupplierQuotationItems(supplierQuotation, params, itemCount);
+
+        try {
+            supplierQuotationService.createSupplierQuotation(sid, supplierQuotation);
+            redirectAttributes.addFlashAttribute("success", "Supplier Quotation created successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error creating Supplier Quotation: " + e.getMessage());
         }
 
         return "redirect:/supplier/list";

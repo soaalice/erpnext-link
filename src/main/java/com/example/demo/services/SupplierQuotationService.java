@@ -141,13 +141,13 @@ public class SupplierQuotationService {
     }
 
     public SupplierQuotation createSupplierQuotation(String sessionId, SupplierQuotation supplierQuotation) throws Exception{
-        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Payment Entry";
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Supplier Quotation";
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Cookie", sessionId);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));        
 
         HttpEntity<SupplierQuotation> request = new HttpEntity<>(supplierQuotation, headers);
 
@@ -162,20 +162,19 @@ public class SupplierQuotationService {
         return new ObjectMapper().convertValue(responseData, SupplierQuotation.class); 
     }
 
-    public SupplierQuotationItem getItemFromInput(String items){
-        String[] itemsTab = items.split(",");
-
-        SupplierQuotationItem item = new SupplierQuotationItem();
-        item.setItemCode(itemsTab[0]);
-        item.setItemName(itemsTab[0]);
-        item.setWarehouse(itemsTab[1]);
-        item.setQty(Double.parseDouble(itemsTab[2]));
-        item.setRate(Double.parseDouble(itemsTab[3]));
-        return item;
-    }
-
-    public void createSupplierQuotationItems(SupplierQuotation supplierQuotation){
-
+    public void setSupplierQuotationItems(SupplierQuotation supplierQuotation, Map<String, String> params, int itemCount){
+        List<SupplierQuotationItem> items = new ArrayList<>();
+        for (int i = 1; i <= itemCount; i++) {
+            if (params.get("item_" + i) != null) {
+                SupplierQuotationItem item = new SupplierQuotationItem();
+                item.setItemCode(params.get("item_" + i));
+                item.setWarehouse(params.get("warehouse_" + i));
+                item.setQty(Double.parseDouble(params.get("qty_" + i)));
+                item.setRate(Double.parseDouble(params.get("rate_" + i)));
+                items.add(item);
+            }
+        }
+        supplierQuotation.setItems(items);
     }
     
 }
