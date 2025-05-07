@@ -54,6 +54,10 @@
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
                                 <i data-lucide="file-text"></i> View SQs
                             </a>
+                            <a th:href="@{/supplier-quotation/create/{name}(name=${supplier.name})}"
+                                class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                                <i data-lucide="plus"></i> Create SQ
+                            </a>
                             <a th:href="@{/purchase-order/supplier/{name}(name=${supplier.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
                                 <i data-lucide="shopping-bag"></i> View POs

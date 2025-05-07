@@ -15,16 +15,16 @@ public class PaymentEntry {
     @JsonProperty("naming_series")
     private String namingSeries = "ACC-PAY-.YYYY.-";
     @JsonProperty("payment_type")
-    private String typeOfPayment;
+    private String typeOfPayment = "Pay";
     @JsonProperty("mode_of_payment")
-    private String modeOfPayment;
+    private String modeOfPayment = "Cash";
     @JsonProperty("party_type")
     private String partyType = "Supplier";
     private String party;
     @JsonProperty("party_name")
     private String partyName;
     @JsonProperty("paid_from")
-    private String paidFrom;
+    private String paidFrom = "Espèces - A";
     @JsonProperty("paid_amount")
     private double paidAmount = 0.00;
     @JsonProperty("received_amount")

@@ -12,6 +12,7 @@ public class SupplierQuotationItem {
     private String itemCode;
     @JsonProperty("item_name")
     private String itemName;
+    private String warehouse;
     private double qty;
     private double rate;
 
