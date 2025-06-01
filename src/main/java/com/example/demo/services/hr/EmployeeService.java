@@ -43,4 +43,37 @@ public class EmployeeService {
             .map(data -> objectMapper.convertValue(data, Employee.class))
             .toList();   
     }
+
+    public Employee getEmployee(String sessionId, String name) throws Exception {
+        String url = ErpApiConfig.ERP_URL_RESOURCE + "/Employee/" + name;
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cookie", sessionId);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            request,
+            Map.class
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> rawEmployee = (Map<String, Object>) response.getBody().get("data");
+
+        // List<Map<String, Object>> rawItems = (List<Map<String, Object>>) rawEmployee.get("items");
+        // List<PurchaseOrderItem> items = rawItems.stream()
+        //     .map(item -> objectMapper.convertValue(item, PurchaseOrderItem.class))
+        //     .toList();
+
+        Employee employee = objectMapper.convertValue(rawEmployee, Employee.class);
+        // employee.setItems(items);
+
+        return employee;
+    }
+
+
 }
