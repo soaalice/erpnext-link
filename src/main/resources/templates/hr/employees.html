@@ -39,7 +39,7 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4 page-header pb-2">
             <h2 class="mb-0 d-flex align-items-center gap-2">
-                <i data-lucide="truck"></i> Employees
+                <i data-lucide="users"></i> Employees
             </h2>
         </div>
 
@@ -54,6 +54,7 @@
                         <th>Employee Ref</th>
                         <th>Employee Name</th>
                         <th>Gender</th>
+                        <th>Salary</th>
                         <th>Company</th>
                     </tr>
                 </thead>
@@ -63,6 +64,7 @@
                         <td th:text="${employee.name}">EMP-001</td>
                         <td th:text="${employee.employeeName}">John Doe</td>
                         <td th:text="${employee.gender}">Male</td>
+                        <td th:text="${employee.ctc}">75000</td>
                         <td th:text="${employee.company}">Acme Corp</td>
                     </tr>
                 </tbody>

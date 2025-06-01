@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class EmployeeService {
     public List<Employee> getEmployees(String sessionId) throws Exception {
-        String fields = "[\"name\", \"gender\", \"company\", \"employee_name\"]";
+        String fields = "[\"name\", \"gender\", \"company\", \"employee_name\", \"ctc\"]";
         String url = ErpApiConfig.ERP_URL_RESOURCE + "/Employee?fields=" + fields;
         RestTemplate restTemplate = new RestTemplate();
 

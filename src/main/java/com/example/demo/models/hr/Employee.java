@@ -13,5 +13,6 @@ public class Employee {
     private String employeeName;
     private String gender;
     private String company;
+    private double ctc;
 
 }
