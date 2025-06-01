@@ -1,8 +1,10 @@
 package com.example.demo.services;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -68,9 +70,13 @@ public class PurchaseInvoiceService {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Map<String, Object>> rawInvoices = (List<Map<String, Object>>) response.getBody().get("data");
 
-        return rawInvoices.stream()
+        Set<String> invoiceIds = new HashSet<>();
+        List<PurchaseInvoice> uniqueInvoices = rawInvoices.stream()
             .map(data -> objectMapper.convertValue(data, PurchaseInvoice.class))
-            .toList();   
+            .filter(invoice -> invoiceIds.add(invoice.getName()))
+        .toList();
+
+        return uniqueInvoices;  
     }
 
     public PurchaseInvoice getPurchaseInvoice(String sessionId, String name) throws Exception {

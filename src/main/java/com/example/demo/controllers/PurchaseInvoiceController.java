@@ -43,23 +43,6 @@ public class PurchaseInvoiceController {
         return "accounting/purchase-invoices";
     }
 
-    @GetMapping("/purchase-order/{purchaseOrder}")
-    public String getPurchaseInvoicesByPurchaseOrder(@PathVariable String purchaseOrder, HttpSession session, Model model) {
-        String sid = (String) session.getAttribute("sid");
-        if (sid == null) {
-            return "redirect:/auth/login";
-        }
-
-        try {
-            List<PurchaseInvoice> purchaseInvoices = purchaseInvoiceService.getPurchaseInvoicesByPurchaseOrder(purchaseOrder, sid);
-            model.addAttribute("invoices", purchaseInvoices);
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("error", "Unable to fetch invoices : " + e.getMessage());
-        }
-        return "accounting/purchase-invoices";
-    }
-
     @GetMapping("/calendar/datas")
     public ResponseEntity<?> getPurchaseInvoiceBySupplierById(HttpSession session) {
         String sid = (String) session.getAttribute("sid");

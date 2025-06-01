@@ -10,12 +10,21 @@
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-start;
+        }
+
         .table-actions a {
             text-decoration: none;
+            min-width: 120px;
+            justify-content: center;
         }
 
         .table-actions i {
-            vertical-align: middle;
+            width: 16px;
+            height: 16px;
         }
 
         .page-header {
@@ -35,6 +44,7 @@
         </div>
 
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
         <div class="table-responsive">
             <table id="suppliersTable" class="table table-hover align-middle table-bordered">
@@ -52,11 +62,15 @@
                         <td class="table-actions">
                             <a th:href="@{/supplier-quotation/supplier/{name}(name=${supplier.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
-                                <i data-lucide="file-text"></i> View SQs
+                                <i data-lucide="clipboard-list"></i> Quotations
+                            </a>
+                            <a th:href="@{/supplier-quotation/create/{name}(name=${supplier.name})}"
+                                class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
+                                <i data-lucide="file-plus"></i> New Quote
                             </a>
                             <a th:href="@{/purchase-order/supplier/{name}(name=${supplier.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
-                                <i data-lucide="shopping-bag"></i> View POs
+                                <i data-lucide="package"></i> Orders
                             </a>
                         </td>
                     </tr>

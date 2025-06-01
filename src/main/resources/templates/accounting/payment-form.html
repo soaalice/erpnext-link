@@ -32,7 +32,7 @@
             <div class="card-body">
                 <div class="row mb-3">
                     <input type="hidden" name="purchaseInvoice" th:value="${purchaseInvoice}">
-                    <div class="col-md-6">
+                    <div class="col-md-6 d-none">
                         <label for="typeOfPayment" class="form-label">Type of Payment</label>
                         <input type="text" id="typeOfPayment" name="typeOfPayment" class="form-control"
                             th:value="${paymentEntry.typeOfPayment}" list="typeOfPaymentOptions" required>
@@ -42,7 +42,7 @@
                             <option value="Internal Transfer"></option>
                         </datalist>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 d-none">
                         <label for="modeOfPayment" class="form-label">Mode of Payment</label>
                         <input type="text" id="modeOfPayment" name="modeOfPayment" class="form-control"
                             th:value="${paymentEntry.modeOfPayment}" list="modeOfPaymentOptions" required>
@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-6 d-none">
                         <label for="paidFrom" class="form-label">Paid From</label>
                         <input type="text" id="paidFrom" name="paidFrom" class="form-control"
                             th:value="${paymentEntry.paidFrom}" list="paidFromOptions" required>
@@ -83,14 +83,14 @@
                             <option value="Bank Account - A"></option>
                         </datalist>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="paidAmount" class="form-label">Paid Amount</label>
                         <input type="number" min="0" step="0.01" id="paidAmount" name="paidAmount" class="form-control"
                             th:value="${paymentEntry.paidAmount}" required>
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-3 d-none">
                     <div class="col-md-6">
                         <label for="postingDate" class="form-label">Posting Date</label>
                         <input type="date" id="postingDate" name="postingDate" class="form-control"
@@ -103,7 +103,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-3 d-none">
                     <div class="col-md-6">
                         <label for="referenceNo" class="form-label">Reference No</label>
                         <input type="text" id="referenceNo" name="referenceNo" class="form-control"

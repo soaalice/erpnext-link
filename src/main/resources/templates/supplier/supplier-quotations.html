@@ -49,6 +49,7 @@
                         <th>Name</th>
                         <th>Status</th>
                         <th>Supplier</th>
+                        <th>Qty</th>
                         <th>Amount</th>
                         <th>Actions</th>
                     </tr>
@@ -58,7 +59,8 @@
                         <td th:text="${stat.index + 1}">1</td>
                         <td th:text="${quotation.name}" >RFQ</td>
                         <td th:text="${quotation.status}">Submitted</td>
-                        <td th:text="${quotation.supplier}"></td>
+                        <td th:text="${quotation.supplier}">Sample Supplier</td>
+                        <td th:text="${quotation.totalQty}">0</td>
                         <td th:text="${quotation.total}">0</td>
                         <td class="table-actions">
                             <a th:href="@{/supplier-quotation/{name}(name=${quotation.name})}"

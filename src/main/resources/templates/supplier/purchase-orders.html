@@ -80,9 +80,9 @@
                         <td th:text="${order.supplier}">Sample Supplier</td>
                         <td th:text="${order.total}">0.00</td>
                         <td>
-                            <a th:href="@{/purchase-invoice/purchase-order/{name}(name=${order.name})}"
+                            <a th:href="@{/purchase-order/{name}(name=${order.name})}"
                                 class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1">
-                                <i data-lucide="receipt-text"></i> View PIs
+                                <i data-lucide="receipt-text"></i> View Details
                             </a>
                         </td>
                     </tr>

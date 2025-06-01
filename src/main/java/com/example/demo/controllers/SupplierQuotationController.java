@@ -1,6 +1,9 @@
 package com.example.demo.controllers;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.models.SupplierQuotation;
 import com.example.demo.models.SupplierQuotationItem;
+import com.example.demo.services.ItemService;
 import com.example.demo.services.SupplierQuotationService;
+import com.example.demo.services.WarehouseService;
 import com.example.demo.utils.ValueController;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +31,12 @@ public class SupplierQuotationController {
 
     @Autowired
     private SupplierQuotationService supplierQuotationService;
+
+    @Autowired
+    private WarehouseService warehouseService;
+
+    @Autowired
+    private ItemService itemService;
     
     @GetMapping("/supplier/{id}")
     public String getSupplierQuotationBySupplierById(@PathVariable String id, HttpSession session, Model model) {
@@ -43,6 +54,61 @@ public class SupplierQuotationController {
         }
 
         return "supplier/supplier-quotations";
+    }
+
+    @GetMapping("/create/{supplier}")
+    public String getSupplierQuotationForm(@PathVariable String supplier, HttpSession session, Model model, RedirectAttributes redirectAttributes){
+        String sid = (String) session.getAttribute("sid");
+        if (sid == null) {
+            return "redirect:/auth/login";
+        }
+
+        SupplierQuotation supplierQuotation = new SupplierQuotation();
+        supplierQuotation.setSupplier(supplier);
+        supplierQuotation.setTransactionDate(LocalDate.now().toString());
+        supplierQuotation.setItems(new ArrayList<>());
+
+        try {
+            model.addAttribute("items", itemService.getItems(sid));
+            model.addAttribute("warehouses", warehouseService.getWarehouses(sid));
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Could not fetch items & warehouses: "+e.getMessage());
+            return "redirect:/supplier/list";
+        }
+
+        model.addAttribute("supplierQuotation", supplierQuotation);
+        return "/supplier/supplier-quotation-form";
+    }
+
+    @PostMapping("/save")
+    public String createSupplierQuotation(HttpSession session,
+                                          @RequestParam Map<String, String> params,
+                                          RedirectAttributes redirectAttributes){
+        String sid = (String) session.getAttribute("sid");
+        if (sid == null) {
+            return "redirect:/auth/login";
+        }
+
+        SupplierQuotation supplierQuotation = new SupplierQuotation();
+        supplierQuotation.setSupplier(params.get("supplier"));
+        supplierQuotation.setTransactionDate(params.get("transactionDate"));
+
+        int itemCount = Integer.parseInt(params.get("itemCount"));
+        if (itemCount == 0) {
+            redirectAttributes.addFlashAttribute("error", "Supplier Quotation doit contenir des items.");
+            return "redirect:/supplier-quotation/create/"+params.get("supplier");
+        }
+
+        supplierQuotationService.setSupplierQuotationItems(supplierQuotation, params, itemCount);
+
+        try {
+            supplierQuotationService.createSupplierQuotation(sid, supplierQuotation);
+            redirectAttributes.addFlashAttribute("success", "Supplier Quotation created successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error creating Supplier Quotation: " + e.getMessage());
+        }
+
+        return "redirect:/supplier/list";
     }
 
     @GetMapping("/{id}")
