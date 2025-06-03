@@ -14,5 +14,8 @@ public class Employee {
     private String gender;
     private String company;
     private double ctc;
-
+    @JsonProperty("date_of_birth")
+    private String dateOfBirth;
+    @JsonProperty("date_of_joining")
+    private String dateOfJoining;
 }

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.models.hr.Employee;
+import com.example.demo.models.hr.SalarySlip;
 import com.example.demo.services.hr.EmployeeService;
+import com.example.demo.services.hr.SalarySlipService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,6 +23,9 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private SalarySlipService salarySlipService;
     
     @GetMapping("/list")
     public String list(HttpSession session,Model model) {
@@ -49,6 +54,8 @@ public class EmployeeController {
         try {
             Employee employee = employeeService.getEmployee(sid, id);
             model.addAttribute("employee", employee);
+            List<SalarySlip> salarySlips = salarySlipService.getSalarySlipsByEmployee(employee.getName(), sid);
+            model.addAttribute("salarySlips", salarySlips);
         } catch (Exception e) {
            redirectAttributes.addFlashAttribute("error", e.getMessage());
            return "redirect:/hr/employee/list";

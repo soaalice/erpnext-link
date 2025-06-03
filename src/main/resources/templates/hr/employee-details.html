@@ -41,40 +41,45 @@
                         <p><strong>Full name:</strong> <span th:text="${employee.employeeName}">N/A</span></p>
                         <p><strong>Gender:</strong> <span th:text="${employee.gender}">N/A</span></p>
                         <p><strong>Company:</strong> <span th:text="${employee.company}">N/A</span></p>
+                        <p><strong>Date of Birth:</strong> <span th:text="${employee.dateOfBirth}">N/A</span></p>
+                        <p><strong>Date of Joining:</strong> <span th:text="${employee.dateOfJoining}">N/A</span></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- <h4 class="mb-3">Items</h4>
+        <h4 class="mb-3">Salary Slips</h4>
         <div class="table-responsive mb-5">
             <table class="table table-hover table-sm align-middle table-bordered">
                 <thead class="table-light">
                     <tr>
                         <th style="width: 60px;">#</th>
-                        <th>Item Code</th>
-                        <th>Item Name</th>
-                        <th>Schedule Date</th>
-                        <th>Quantity</th>
-                        <th>Rate</th>
-                        <th>Amount</th>
+                        <th>Name</th>
+                        <th>Gross Pay</th>
+                        <th>Net Pay</th>
+                        <th style="width: 100px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="item, stat : ${employee.items}">
+                    <tr th:each="salarySlip, stat : ${salarySlips}">
                         <td th:text="${stat.index + 1}">1</td>
-                        <td th:text="${item.itemCode}">Item Code</td>
-                        <td th:text="${item.itemName}">Item Name</td>
-                        <td th:text="${item.scheduleDate}">Schedule Date</td>
-                        <td th:text="${item.qty}">0</td>
-                        <td th:text="${item.rate}">0.00</td>
-                        <td th:text="${item.amount}">0.00</td>
+                        <td th:text="${salarySlip.name}">SLIP-001</td>
+                        <td th:text="${salarySlip.grossPay}">0.00</td>
+                        <td th:text="${salarySlip.netPay}">0.00</td>
+                        <td>
+                            <form th:action="@{/hr/salary-slip/export}" method="post" style="display: inline;">
+                                <input type="hidden" name="name" th:value="${salarySlip.name}">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    <i data-lucide="file-output"></i> Export to PDF
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <h4 class="mb-3">Purchase Invoices</h4>
+        <!-- <h4 class="mb-3">Purchase Invoices</h4>
         <div class="table-responsive">
             <table class="table table-hover table-sm align-middle table-bordered">
                 <thead class="table-light">
