@@ -57,6 +57,7 @@
                         <th>Name</th>
                         <th>Gross Pay</th>
                         <th>Net Pay</th>
+                        <th>Status</th>
                         <th style="width: 100px;">Actions</th>
                     </tr>
                 </thead>
@@ -66,6 +67,7 @@
                         <td th:text="${salarySlip.name}">SLIP-001</td>
                         <td th:text="${salarySlip.grossPay}">0.00</td>
                         <td th:text="${salarySlip.netPay}">0.00</td>
+                        <td th:text="${salarySlip.status}">Draft</td>
                         <td>
                             <form th:action="@{/hr/salary-slip/export}" method="post" style="display: inline;">
                                 <input type="hidden" name="name" th:value="${salarySlip.name}">

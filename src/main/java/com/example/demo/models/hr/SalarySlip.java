@@ -11,6 +11,8 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SalarySlip {
     private String name;
+    private String company;
+    private String status;
     @JsonProperty("employee_name")
     private String employeeName;
     @JsonProperty("total_working_days")

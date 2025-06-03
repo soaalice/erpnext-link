@@ -6,6 +6,7 @@ import com.example.demo.models.hr.SalaryComponent;
 import com.example.demo.models.hr.SalarySlip;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
@@ -88,53 +89,122 @@ public class PdfService {
             PdfWriter.getInstance(document, outputStream);
             document.open();
 
-            // Titre principal
-            Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD);
-            document.add(new Paragraph("Salary Slip", titleFont));
-            document.add(new Paragraph(" ")); // Ligne vide pour espacement
+            // Company Header Section
+            Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD);
+            Font subtitleFont = new Font(Font.HELVETICA, 14, Font.BOLD);
+            Font normalFont = new Font(Font.HELVETICA, 10, Font.NORMAL);
+            Font headerFont = new Font(Font.HELVETICA, 10, Font.BOLD);
 
-            // Informations générales sur le bulletin de salaire
-            Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL);
-            document.add(new Paragraph("Employee Name: " + salarySlip.getEmployeeName(), infoFont));
-            document.add(new Paragraph("Total Working Days: " + salarySlip.getTotalWorkingDays(), infoFont));
-            document.add(new Paragraph("Absent Days: " + salarySlip.getAbsentDays(), infoFont));
-            document.add(new Paragraph("Gross Pay: " + salarySlip.getGrossPay(), infoFont));
-            document.add(new Paragraph("Total Deduction: " + salarySlip.getTotalDeduction(), infoFont));
-            document.add(new Paragraph("Net Pay: " + salarySlip.getNetPay(), infoFont));
-            document.add(new Paragraph("Total in Words: " + salarySlip.getTotalInWords(), infoFont));
-            document.add(new Paragraph("Total Incoming Tax: " + salarySlip.getTotalIncomingTax(), infoFont));
-            document.add(new Paragraph(" ")); // Ligne vide pour espacement
+            // Header with company details
+            Paragraph header = new Paragraph("SALARY SLIP", titleFont);
+            header.setAlignment(Element.ALIGN_CENTER);
+            document.add(header);
 
-            // Tableau des composants de salaire
-            PdfPTable table = new PdfPTable(4); // 4 colonnes
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(10f);
-            table.setSpacingAfter(10f);
+            // Pay Period
+            Paragraph payPeriod = new Paragraph(String.format("Pay Period: %s to %s",
+                    salarySlip.getStartDate(), salarySlip.getEndDate()), subtitleFont);
+            payPeriod.setAlignment(Element.ALIGN_CENTER);
+            payPeriod.setSpacingBefore(10f);
+            payPeriod.setSpacingAfter(20f);
+            document.add(payPeriod);
 
-            // En-têtes du tableau
-            Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD);
-            table.addCell(new PdfPCell(new Paragraph("Component Name", headerFont)));
-            table.addCell(new PdfPCell(new Paragraph("Type", headerFont)));
-            table.addCell(new PdfPCell(new Paragraph("Amount", headerFont)));
-            
-            // Contenu des gains
+            // Employee Details Table
+            PdfPTable employeeDetails = new PdfPTable(2);
+            employeeDetails.setWidthPercentage(100);
+            employeeDetails.setSpacingBefore(10f);
+            employeeDetails.setSpacingAfter(10f);
+
+            addTableCell(employeeDetails, "Employee Name:", headerFont);
+            addTableCell(employeeDetails, salarySlip.getEmployeeName(), normalFont);
+            addTableCell(employeeDetails, "Company:", headerFont);
+            addTableCell(employeeDetails, salarySlip.getCompany(), normalFont);
+            addTableCell(employeeDetails, "Posting Date:", headerFont);
+            addTableCell(employeeDetails, salarySlip.getPostingDate(), normalFont);
+            addTableCell(employeeDetails, "Total Working Days:", headerFont);
+            addTableCell(employeeDetails, String.valueOf(salarySlip.getTotalWorkingDays()), normalFont);
+            addTableCell(employeeDetails, "Absent Days:", headerFont);
+            addTableCell(employeeDetails, String.valueOf(salarySlip.getAbsentDays()), normalFont);
+            document.add(employeeDetails);
+
+            // Earnings & Deductions Section
+            document.add(new Paragraph("Earnings & Deductions", subtitleFont));
+
+            // Create table for earnings and deductions
+            PdfPTable salaryTable = new PdfPTable(3);
+            salaryTable.setWidthPercentage(100);
+            salaryTable.setSpacingBefore(10f);
+            salaryTable.setSpacingAfter(10f);
+            float[] columnWidths = {3f, 2f, 2f};
+            salaryTable.setWidths(columnWidths);
+
+            // Table Headers
+            addTableHeader(salaryTable, "Component", headerFont);
+            addTableHeader(salaryTable, "Type", headerFont);
+            addTableHeader(salaryTable, "Amount", headerFont);
+
+            // Add Earnings
             for (SalaryComponent earning : salarySlip.getEarnings()) {
-                table.addCell(new PdfPCell(new Paragraph(earning.getName(), headerFont)));
-                table.addCell(new PdfPCell(new Paragraph(earning.getType(), headerFont)));
-                table.addCell(new PdfPCell(new Paragraph(String.valueOf(earning.getAmount()), headerFont)));
+                addTableCell(salaryTable, earning.getSalaryComponent(), normalFont);
+                addTableCell(salaryTable, "Earning", normalFont);
+                addTableCell(salaryTable, String.format("%.2f", earning.getAmount()), normalFont);
             }
-            // Contenu des déductions
+
+            // Add Deductions
             for (SalaryComponent deduction : salarySlip.getDeductions()) {
-                table.addCell(new PdfPCell(new Paragraph(deduction.getName(), headerFont)));
-                table.addCell(new PdfPCell(new Paragraph(deduction.getType(), headerFont)));
-                table.addCell(new PdfPCell(new Paragraph(String.valueOf(deduction.getAmount()), headerFont)));
+                addTableCell(salaryTable, deduction.getSalaryComponent(), normalFont);
+                addTableCell(salaryTable, "Deduction", normalFont);
+                addTableCell(salaryTable, String.format("%.2f", deduction.getAmount()), normalFont);
             }
-            document.add(table);
+            document.add(salaryTable);
+
+            // Summary Section
+            PdfPTable summaryTable = new PdfPTable(2);
+            summaryTable.setWidthPercentage(100);
+            summaryTable.setSpacingBefore(20f);
+
+            addSummaryRow(summaryTable, "Gross Pay:", String.format("%.2f", salarySlip.getGrossPay()), headerFont);
+            addSummaryRow(summaryTable, "Total Deductions:", String.format("%.2f", salarySlip.getTotalDeduction()), headerFont);
+            addSummaryRow(summaryTable, "Net Pay:", String.format("%.2f", salarySlip.getNetPay()), headerFont);
+            addSummaryRow(summaryTable, "Total Income Tax:", String.format("%.2f", salarySlip.getTotalIncomingTax()), headerFont);
+            document.add(summaryTable);
+
+            // Amount in Words
+            Paragraph amountInWords = new Paragraph("Amount in Words: " + salarySlip.getTotalInWords(),
+                    new Font(Font.HELVETICA, 10, Font.ITALIC));
+            amountInWords.setSpacingBefore(20f);
+            document.add(amountInWords);
+
         } catch (DocumentException e) {
             e.printStackTrace();
         } finally {
             document.close();
         }
         return outputStream.toByteArray();
-        }
+    }
+
+    private static void addTableHeader(PdfPTable table, String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Paragraph(text, font));
+        cell.setBackgroundColor(new java.awt.Color(240, 240, 240));
+        cell.setPadding(5);
+        table.addCell(cell);
+    }
+
+    private static void addTableCell(PdfPTable table, String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Paragraph(text, font));
+        cell.setPadding(5);
+        table.addCell(cell);
+    }
+
+    private static void addSummaryRow(PdfPTable table, String label, String value, Font font) {
+        PdfPCell labelCell = new PdfPCell(new Paragraph(label, font));
+        labelCell.setBorder(com.lowagie.text.Rectangle.NO_BORDER);
+        labelCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+        PdfPCell valueCell = new PdfPCell(new Paragraph(value, font));
+        valueCell.setBorder(com.lowagie.text.Rectangle.NO_BORDER);
+        valueCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+        table.addCell(labelCell);
+        table.addCell(valueCell);
+    }
 }
