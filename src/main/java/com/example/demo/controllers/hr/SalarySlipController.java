@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.models.hr.SalarySlip;
 import com.example.demo.services.PdfService;
+import com.example.demo.services.hr.EmployeeService;
 import com.example.demo.services.hr.SalarySlipService;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +25,9 @@ import jakarta.servlet.http.HttpSession;
 public class SalarySlipController {
     @Autowired
     private SalarySlipService salarySlipService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @PostMapping("/export")
     public ResponseEntity<?> exportSalarySlip(@RequestParam String name, HttpSession session) {
@@ -56,6 +60,7 @@ public class SalarySlipController {
         try {
             List<SalarySlip> salarySlips = salarySlipService.getSalarySlips(sid);
             model.addAttribute("salarySlips", salarySlips);
+            model.addAttribute("employees", employeeService.getEmployees(sid));
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("salarySlips", List.of());

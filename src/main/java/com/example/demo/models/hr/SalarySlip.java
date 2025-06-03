@@ -1,5 +1,6 @@
 package com.example.demo.models.hr;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -38,4 +39,17 @@ public class SalarySlip {
 
     List<SalaryComponent> earnings;
     List<SalaryComponent> deductions;
+
+    private int month = startDate != null ? getMonth() : 1;
+    private int year = startDate != null ? getYear() : 1;
+
+    public int getMonth(){
+        LocalDate date = LocalDate.parse(startDate);
+        return date.getMonthValue();
+    }
+
+    public int getYear(){
+        LocalDate date = LocalDate.parse(startDate);
+        return date.getYear();
+    }
 }

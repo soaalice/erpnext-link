@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Slips - ERP</title>
+    <link rel="icon" href="@{/erpnext-logo.svg}" type="image/svg+xml">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .dataTables_filter {
+            display: none !important;
+        }
+
+        .table-actions a {
+            text-decoration: none;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .table-actions i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .page-header {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .stats-card {
+            border-left: 4px solid;
+        }
+
+        .stats-card.gross {
+            border-left-color: #28a745;
+        }
+
+        .stats-card.net {
+            border-left-color: #007bff;
+        }
+
+        .stats-card.tax {
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+
+<body onload="lucide.createIcons()">
+    <div th:replace="~{inc/header :: header}"></div>
+
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 page-header pb-2">
+            <h2 class="mb-0 d-flex align-items-center gap-2">
+                <i data-lucide="receipt"></i> Salary Slips
+            </h2>
+        </div>
+
+        <div class="row mb-4 row-gap-1">
+            <div class="col-md-4">
+                <select id="yearFilter" class="form-select">
+                    <option value="">All Years</option>
+                    <option th:each="year : ${#numbers.sequence(2020, #dates.year(#dates.createNow()))}" th:value="${year}"
+                        th:text="${year}">2024</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="monthFilter" class="form-select">
+                    <option value="">All Months</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="employeeFilter" class="form-select">
+                    <option value="">All Employees</option>
+                    <option th:each="employee : ${employees}" th:value="${employee.employeeName}" th:text="${employee.employeeName}">
+                        John Doe</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4 row-gap-1">
+            <div class="col-md-4">
+                <div class="card stats-card gross">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Total Gross Pay</h6>
+                        <h3 class="card-title" id="totalGrossPay">0.00 €</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stats-card net">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Total Net Pay</h6>
+                        <h3 class="card-title" id="totalNetPay">0.00 €</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stats-card tax">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Total Tax</h6>
+                        <h3 class="card-title" id="totalTax">0.00 €</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+        <div class="table-responsive">
+            <table id="salarySlipsTable" class="table table-hover align-middle table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th>Reference</th>
+                        <th>Employee</th>
+                        <th>Period</th>
+                        <th>Gross Pay</th>
+                        <th>Deductions</th>
+                        <th>Net Pay</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="slip, stat : ${salarySlips}" th:attr="data-year=${slip.year},
+                                 data-month=${slip.month},
+                                 data-employee=${slip.employeeName}">
+                        <td th:text="${stat.index + 1}">1</td>
+                        <td th:text="${slip.name}">SAL-2024-00001</td>
+                        <td th:text="${slip.employeeName}">John Doe</td>
+                        <td th:text="${slip.startDate + ' to ' + slip.endDate}">2024-01-01 to 2024-01-31</td>
+                        <td th:text="${slip.grossPay}">0.00 €</td>
+                        <td th:text="${slip.totalDeduction} ">0.00 €</td>
+                        <td th:text="${slip.netPay}">0.00 €</td>
+                        <td class="table-actions">
+                            <form th:action="@{/hr/salary-slip/export}" method="post" style="display: inline;">
+                                <input type="hidden" name="name" th:value="${slip.name}">
+                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                    <i data-lucide="file-output"></i> Export to PDF
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const table = $('#salarySlipsTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+            });
+
+            function updateTable() {
+                const selectedYear = $('#yearFilter').val();
+                const selectedMonth = $('#monthFilter').val();
+                const selectedEmployee = $('#employeeFilter').val();
+
+                console.log('Selected Filters:', {
+                    year: selectedYear,
+                    month: selectedMonth,
+                    employee: selectedEmployee
+                });
+
+                // Custom filtering function
+                $.fn.dataTable.ext.search = [];
+                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                    const $row = $(table.row(dataIndex).node());
+                    
+                    const year = $row.attr('data-year');
+                    const month = $row.attr('data-month');
+                    const employee = $row.attr('data-employee');
+
+                    const matchYear = !selectedYear || selectedYear === year;
+                    const matchMonth = !selectedMonth || selectedMonth === month;
+                    const matchEmployee = !selectedEmployee || selectedEmployee === employee;
+
+                    return matchYear && matchMonth && matchEmployee;
+                });
+
+                table.draw();
+
+                // Recalculate totals
+                let totalGross = 0;
+                let totalNet = 0;
+                let totalDeductions = 0;
+
+                table.rows({ search: 'applied' }).every(function () {
+                    const row = $(this.node());
+                    const grossPay = parseFloat(row.find('td:nth-child(5)').text()) || 0;
+                    const deductions = parseFloat(row.find('td:nth-child(6)').text()) || 0;
+                    const netPay = parseFloat(row.find('td:nth-child(7)').text()) || 0;
+
+                    totalGross += grossPay;
+                    totalDeductions += deductions;
+                    totalNet += netPay;
+                });
+
+                $('#totalGrossPay').text(totalGross.toFixed(2) + ' €');
+                $('#totalTax').text(totalDeductions.toFixed(2) + ' €');
+                $('#totalNetPay').text(totalNet.toFixed(2) + ' €');
+            }
+
+            // Event listeners
+            $('#yearFilter, #monthFilter, #employeeFilter').on('change', updateTable);
+
+            // Initial call
+            updateTable();
+        });
+    </script>
+
+</body>
+
+</html>
